@@ -24,15 +24,21 @@ df = read.csv("TMDb_Dataset.csv")
 ```
 
 ```{r}
-Years = 1980:2019
-Runtimes = c()
+Years = seq(1980,2015,length = 8)
 
+Runtimes = c()
 for (year in Years) {
-  Runtimes = append(Runtimes, mean(df[grepl(toString(year), df$Date), ]$Runtime))
+  runtime = 0
+  num_films = 0
+  for (i in 0:4) {
+    runtime = runtime + sum(df[grepl(toString(year+i), df$Date), ]$Runtime)
+    num_films = num_films + length(df[grepl(toString(year+i), df$Date), ]$Runtime)
+    }
+  Runtimes = append(Runtimes, runtime/num_films)
 }
 
 regressional_model = lm(Runtimes~Years)
-plot(Years, Runtimes, col = "blue")  #
+plot(Years+2.5, Runtimes, col = "blue")  #
 abline(regressional_model, col = "red")
 summary(regressional_model)
 ```
@@ -44,8 +50,14 @@ for (category in Categories) {
   
   Runtimes = c()
   for (year in Years) {
-    Runtimes = append(Runtimes, mean(temp_df[grepl(toString(year), temp_df$Date), ]$Runtime))
-  }
+    runtime = 0
+    num_films = 0
+    for (i in 0:4) {
+      runtime = runtime + sum(temp_df[grepl(toString(year+i), temp_df$Date), ]$Runtime)
+      num_films = num_films + length(temp_df[grepl(toString(year+i), temp_df$Date), ]$Runtime)
+      }
+    Runtimes = append(Runtimes, runtime/num_films)
+}
 
   regressional_model = lm(Runtimes~Years)
   plot(Years, Runtimes, col = "blue", main = category)
