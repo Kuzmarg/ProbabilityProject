@@ -21,6 +21,36 @@ We chose a dataset from TMDb, containing various information on films from 1880 
 ## Hypothesis 1: Film Duration
 ```{r}
 df = read.csv("TMDb_Dataset.csv")
-df['Title']
+```
+
+```{r}
+Years = 1980:2019
+Runtimes = c()
+
+for (year in Years) {
+  Runtimes = append(Runtimes, mean(df[grepl(toString(year), df$Date), ]$Runtime))
+}
+
+regressional_model = lm(Runtimes~Years)
+plot(Years, Runtimes, col = "blue")  #
+abline(regressional_model, col = "red")
+summary(regressional_model)
+```
+```{r}
+Categories = c("Crime", "Comedy", "Action", "Thriller", "Adventure", "Science Fiction", "Drama", "Romance")
+
+for (category in Categories) {
+  temp_df = df[grepl(category, df$Categories), ]
+  
+  Runtimes = c()
+  for (year in Years) {
+    Runtimes = append(Runtimes, mean(temp_df[grepl(toString(year), temp_df$Date), ]$Runtime))
+  }
+
+  regressional_model = lm(Runtimes~Years)
+  plot(Years, Runtimes, col = "blue", main = category)
+  abline(regressional_model, col = "red")
+  summary(regressional_model)
+}
 ```
 
