@@ -17,52 +17,96 @@ We chose a dataset from TMDb, containing various information on films from 1880 
 
 **4)** The quantities of films of different categories produced: we want to analyze the popularity of genres in particular years.
 
-
-## Hypothesis 1: Film Duration
 ```{r}
+# Needed library
+library(BSDA)
+
+# Reading the data from data set
 df = read.csv("TMDb_Dataset.csv")
 ```
+
+## Hypothesis 1: Film Duration
+
+Here, we test whether the film duration over time actual decreased. The first try was to build a linear regression model of mean film duration over time. **The reason for it is that the linear model can clearly show whether the relation is increasing or decreasing.** We took 5 years periods and built a relation of mean film duration in these periods to the year of film release (for a period of 5 years we took the middle of this period).
 
 ```{r}
 Years = seq(1980,2015,length = 8)
 
 Runtimes = c()
 for (year in Years) {
-  runtime = 0
-  num_films = 0
-  for (i in 0:4) {
-    runtime = runtime + sum(df[grepl(toString(year+i), df$Date), ]$Runtime)
-    num_films = num_films + length(df[grepl(toString(year+i), df$Date), ]$Runtime)
-    }
-  Runtimes = append(Runtimes, runtime/num_films)
+  runtime = mean(df[strtoi(substring(df$Date, 0, 4)) >= year & 
+                   strtoi(substring(df$Date, 0, 4)) < year+5, ]$Runtime)
+  Runtimes = append(Runtimes, runtime)
 }
 
+Years = Years + 2.5
 regressional_model = lm(Runtimes~Years)
-plot(Years+2.5, Runtimes, col = "blue")  #
+plot(Years, Runtimes, col = "blue", main = "Mean film duration over years")
 abline(regressional_model, col = "red")
 summary(regressional_model)
 ```
+
+The p-value in the test of slope coefficient is significantly big. The model here states that our starting assumption is wrong: movies are getting longer. **Nevertheless, the main problem is that real relation is far from linear, so we can not make any conclusions here**.
+
+##### Here you can also see such linear models for different categories of films
+
 ```{r}
 Categories = c("Crime", "Comedy", "Action", "Thriller", "Adventure", "Science Fiction", "Drama", "Romance")
-
+  
 for (category in Categories) {
+  Years = seq(1980, 2015, length = 8)
   temp_df = df[grepl(category, df$Categories), ]
   
   Runtimes = c()
   for (year in Years) {
-    runtime = 0
-    num_films = 0
-    for (i in 0:4) {
-      runtime = runtime + sum(temp_df[grepl(toString(year+i), temp_df$Date), ]$Runtime)
-      num_films = num_films + length(temp_df[grepl(toString(year+i), temp_df$Date), ]$Runtime)
-      }
-    Runtimes = append(Runtimes, runtime/num_films)
+    runtime = mean(temp_df[strtoi(substring(temp_df$Date, 0, 4)) >= year & 
+                   strtoi(substring(temp_df$Date, 0, 4)) < year+5, ]$Runtime)
+    Runtimes = append(Runtimes, runtime)
 }
-
+  
+  Years = Years + 2.5
   regressional_model = lm(Runtimes~Years)
   plot(Years, Runtimes, col = "blue", main = category)
   abline(regressional_model, col = "red")
-  summary(regressional_model)
+  
+  
+  cat("Summary for", category)
+  print(summary(regressional_model))
 }
 ```
 
+The directions of lines for different categories vary significantly, though for some of them the p-value of the testing of slope coefficient is to low to build conclusions based on this estimate.
+
+Though overall the p-values for the slope are high, the shown linear graphs **do not realistically represent the relation**, so we decided to **do another test** of the hypothesis and use another simpler yet more accurate method: **divide the films into two categories: those released before 2001 (in the 20th century) and those released after (in the 21st century)**, and then use **t-test** (as we do not have information on the variance) to test $H_0:\mu_{before}=\mu_{after}$ against $H_1:\mu_{before} <\mu_{after}$.
+
+```{r}
+duration_21 = df[strtoi(substring(df$Date, 0, 4)) >= 2001,]$Runtime
+duration_20 = df[strtoi(substring(df$Date, 0, 4)) < 2001,]$Runtime
+
+t.test(duration_20, duration_21, alternative = "g")
+t.test(duration_20, duration_21, alternative = "l")
+```
+
+The results are completely opposite to what we expected: the mean duration of movie is significantly bigger in the new century.
+
+##### Here you can also see test results for different categories of films
+
+```{r}
+for (category in Categories) {
+  temp_df = df[grepl(category, df$Categories), ]
+  
+  duration_21 = df[strtoi(substring(temp_df$Date, 0, 4)) >= 2001,]$Runtime
+  duration_20 = df[strtoi(substring(temp_df$Date, 0, 4)) < 2001,]$Runtime
+
+  cat('Tests for', category)
+  print(t.test(duration_20, duration_21, alternative = "g"))
+  print(t.test(duration_20, duration_21, alternative = "l"))
+}
+```
+
+As we see, the only category in which the duration decreased as we expected is **Adventure films** as the p-value of the test, where the $H_1$ is that the duration decreased, is very low, meaning that we should reject $H_0$.
+
+**Overall**, in this part we took a chance to use linear regression and t-test to find out that the duration of films actually did not decrease from the previous century's last decades.\
+**Now, let's move to the second hypothesis**
+
+## Hypothesis 2: [...]
