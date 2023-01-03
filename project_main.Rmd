@@ -148,13 +148,14 @@ As plots show, there just was growth in number of films present, and it also is 
 
 ## Hypothesis 3: Age of Leading Actors
 
-Here, we test whether the film duration over time actual decreased. The first try was to build a linear regression model of mean film duration over time. **The reason for it is that the linear model can clearly show whether the relation is increasing or decreasing.** We took 5 years periods and built a relation of mean film duration in these periods to the year of film release (for a period of 5 years we took the middle of this period).
-
+In that hypothesis we test the relation between the year of production and the age of leading actor. In our hypothesis we expect, that in more recent films actors were more mature than in more recent ones. For that we would combine the data from .csv file, that was used in previous tests and from file Birth_Actors.csv, which has the data about dates of birth of actors. At first we import that file and store its data in dataframe.
 
 ```{r}
+# Read the data from data set about year of birth of actors
 dob_df = read.csv("Birth_Actors.csv")
-print(head(dob_df,10))
 ```
+
+Here we create the test that would test our ages of actors over years. But besides general age of all leading actors, we would divide male and female actors to plot them at the same graph and see how their mean ages differ. After plotting the information we show the summary of linear model for our results.
 
 ```{r}
 age_of_actors_function <- function(start_of_period, end_of_period, step){
@@ -228,14 +229,28 @@ age_of_actors_function <- function(start_of_period, end_of_period, step){
 }
 ```
 
+Here, we test whether the age of leading actor over time actualy decreased. We build the linear model for films from 1950 to 2015 with a period of 5 years. The reason to limit our data set to such year is because of development of industry, which was high enough only in 50's. We took 5 years periods and built a relation of mean age of actor in these periods to the year of film release (for a period of 5 years we took the middle of this period).
+
 ```{r}
-age_of_actors_function(1955, 2015, 5)
+age_of_actors_function(1950, 2015, 5)
 ```
+
+From the data that we can see at our plots and summaries of linear models we can assume, that there is linear dependency between the year of production and the age of leading actor. But, surprisingly, it is the opposite to the one, that was predicted before the experiment. We can see, that the relation between the year of production and the age is straight, in contrast to our hypothesis. Also, we have p-value less than 0.05 for linear model, which is very good statistics and we should stick to it.
+
+Besides, the plot of male and female ages shows, that they behave very similar to general trend. But there is one interesting, though predictable, detail - difference between mean ages for same periods is **more than 5 years** in average. The reason for it -- **SOCIETY!**
+
+Now we would test the 20th (1950 to 1999) and 21st (2000 to 2015) centuries of film industries and their year to age relation.
+
+The first test would be for 20th century.
 
 ```{r}
 age_of_actors_function(1955, 1999, 1)
 ```
 
+
+
 ```{r}
 age_of_actors_function(2000, 2015, 1)
 ```
+
+For the 21st century we see the most 'linear' graphs. P-values of all our graphs are very-very small. In fact, they are almost perfect and from the result of our linear model we can say, that there is indeed the relation between age and year. In recent years mean age spiked in comparison to previous decades. There may be several reasons for that: demand on older actors, lack of actor flow (stars occupy their places for years) general aging of people in that industry.
