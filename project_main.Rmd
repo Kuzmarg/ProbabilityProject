@@ -264,12 +264,12 @@ For the 21st century we see the most 'linear' graphs. P-values of all our graphs
 
 ## Conclusions
 
-In that research we studied the data about film industry at very long period (almost from the start of its development). We started our research with view at the movies and statistics, which was a bit different to the reality. **All** our initial hypothesis were opposite to the real data, which is a very cool result in fact. 
+In that research, we studied the data about the film industry at very long period (almost from the start of its development). We started our research with a view at the movies and statistics, which was a bit different from reality. All our initial hypotheses were opposite to the actual data, which is a very cool result in fact.
 
-With help of statistics we found the truth about average film length, which did not decrease with flow of time. Our hypothesis, that people have less time for movies was crashed after those results.
+With the help of statistics, we found the truth about average film length, which did not decrease with the flow of time. Our hypothesis that people have less time for movies was crashed after those results.
 
-After research of distributions of different genres we concluded that there was not a clear relation between some time period and popularity of certain category of films. 
+After researching distributions of different genres, we concluded that there was no clear relationship between some periods and the popularity of specific categories of films.
 
-In the end, we found out, that mean age of leading actor is increasing over time. To our surprise, youngsters are not that common lead actors, as there is a growing demand on older actors. We can say, that people love some actors and stick to them for a long time.
+In the end, we found that the mean age of the leading actor increases over time. To our surprise, youngsters are not that common lead actors, as there is a growing demand for older actors. We can say that people love some actors and stick to them for a long time.
 
-The whole project was fun and cool test for our statistics knowledge and skills. So, from the behalf of our team, thank you for the reading of our document.
+The whole project was a fun and cool test for our statistics knowledge and skills. So, on behalf of our team, thank you for reading our document.
