@@ -26,11 +26,11 @@ df = read.csv("TMDb_Dataset.csv")
 ```
 
 ## Hypothesis 1: Film Duration
-
+In this part we will take into consideration only films released after 1950, as before that the industry was not really developed and the number of films is not significant.
 Here, we test whether the film duration over time actual decreased. The first try was to build a linear regression model of mean film duration over time. **The reason for it is that the linear model can clearly show whether the relation is increasing or decreasing.** We took 5 years periods and built a relation of mean film duration in these periods to the year of film release (for a period of 5 years we took the middle of this period).
 
 ```{r}
-Years = seq(1980,2015,length = 8)
+Years = seq(1950,2015,length = 14)
 
 Runtimes = c()
 for (year in Years) {
@@ -46,7 +46,7 @@ abline(regressional_model, col = "red")
 summary(regressional_model)
 ```
 
-The p-value in the test of slope coefficient is significantly big. The model here states that our starting assumption is wrong: movies are getting longer. **Nevertheless, the main problem is that real relation is far from linear, so we can not make any conclusions here**.
+The p-value in the test of slope coefficient is hardly bigger than 0.05. The model here states that our starting assumption is wrong: movies are getting longer. **Nevertheless, the main problem is that real relation is far from linear, so we can not make any conclusions here**.
 
 ##### Here you can also see such linear models for different categories of films
 
@@ -54,7 +54,7 @@ The p-value in the test of slope coefficient is significantly big. The model her
 Categories = c("Crime", "Comedy", "Action", "Thriller", "Adventure", "Science Fiction", "Drama", "Romance")
   
 for (category in Categories) {
-  Years = seq(1980, 2015, length = 8)
+  Years = seq(1950,2015,length = 14)
   temp_df = df[grepl(category, df$Categories), ]
   
   Runtimes = c()
@@ -77,11 +77,11 @@ for (category in Categories) {
 
 The directions of lines for different categories vary significantly, though for some of them the p-value of the testing of slope coefficient is to low to build conclusions based on this estimate.
 
-Though overall the p-values for the slope are high, the shown linear graphs **do not realistically represent the relation**, so we decided to **do another test** of the hypothesis and use another simpler yet more accurate method: **divide the films into two categories: those released before 2001 (in the 20th century) and those released after (in the 21st century)**, and then use **t-test** (as we do not have information on the variance) to test $H_0:\mu_{before}=\mu_{after}$ against $H_1:\mu_{before} <\mu_{after}$.
+Though in most cases the p-values for the slope coef. are high, the shown linear graphs **do not realistically represent the relation**, so we decided to **do another test** of the hypothesis and use another simpler yet more accurate method: **divide the films into two categories: those released before 2001 (in the 20th century) and those released after (in the 21st century)**, and then use **t-test** (as we do not have information on the variance) to test $H_0:\mu_{before}=\mu_{after}$ against $H_1:\mu_{before} <\mu_{after}$.
 
 ```{r}
 duration_21 = df[strtoi(substring(df$Date, 0, 4)) >= 2001,]$Runtime
-duration_20 = df[strtoi(substring(df$Date, 0, 4)) < 2001,]$Runtime
+duration_20 = df[strtoi(substring(df$Date, 0, 4)) < 2001 & strtoi(substring(df$Date, 0, 4)) >= 1950,]$Runtime
 
 t.test(duration_20, duration_21, alternative = "g")
 t.test(duration_20, duration_21, alternative = "l")
@@ -96,7 +96,7 @@ for (category in Categories) {
   temp_df = df[grepl(category, df$Categories), ]
   
   duration_21 = df[strtoi(substring(temp_df$Date, 0, 4)) >= 2001,]$Runtime
-  duration_20 = df[strtoi(substring(temp_df$Date, 0, 4)) < 2001,]$Runtime
+  duration_20 = df[strtoi(substring(temp_df$Date, 0, 4)) < 2001 & strtoi(substring(temp_df$Date, 0, 4)) >= 1950,]$Runtime
 
   cat('Tests for', category)
   print(t.test(duration_20, duration_21, alternative = "g"))
