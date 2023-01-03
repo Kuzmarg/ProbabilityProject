@@ -26,7 +26,9 @@ df = read.csv("TMDb_Dataset.csv")
 ```
 
 ## Hypothesis 1: Film Duration
+
 In this part we will take into consideration only films released after 1950, as before that the industry was not really developed and the number of films is not significant.
+
 Here, we test whether the film duration over time actual decreased. The first try was to build a linear regression model of mean film duration over time. **The reason for it is that the linear model can clearly show whether the relation is increasing or decreasing.** We took 5 years periods and built a relation of mean film duration in these periods to the year of film release (for a period of 5 years we took the middle of this period).
 
 ```{r}
