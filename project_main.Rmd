@@ -110,7 +110,7 @@ As we see, the only category in which the duration decreased as we expected is *
 **Now, let's move to the second hypothesis**
 
 ## Part 2: here we want to analyze different film categories and see how their popularities are distributed
-Firstly, that`s the quantities of all films from dataframe corresponding to the genre:
+Firstly, that's the quantities of all films from dataframe corresponding to the genre:
 ```{r}
 Categories = c("Crime", "Comedy", "Action", "Thriller", "Adventure", "Science Fiction", "Drama", "Romance")
 categories_vec <- c()
@@ -125,8 +125,8 @@ categories_counts <- as.data.frame(table(categories_vec))
 categories_counts
 barplot(categories_counts$Freq, main = "Number of films", names = categories_counts$categories_vec)
 ```
-Let`s now see how popularitн of different genres changed over years
-(xlab deopicts the year when there was the biggest number of films of such category produced)
+Let's now see how popularitн of different genres changed over years
+(xlab depicts the year when there was the biggest number of films of such category produced)
 ```{r}
 
 years <- strtrim(df$Date, 4)
