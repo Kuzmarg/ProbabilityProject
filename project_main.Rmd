@@ -14,7 +14,7 @@ We chose a dataset from TMDb, containing various information on films from 1880 
 
 **1)** The average film duration: we suggest that as time goes films become shorter. H0: on average, the duration of films decreases by 0%; H1: the difference is present. We are also interested in testing this metric in different film categories;
 
-**2)** The quantities of films of different categories produced: we want to analyze the popularity of genres in particular years;
+**2)** The quantities of films of different categories produced: we want to analyze the popularity of genres in general, and dynamics for particular genres through years;
 
 **3)** The age of leading actors: we assume that in the more recent works, actors are younger. H0: on average, the age of leading actors decreases by 0 years every ten years; H1: the metric is greater;
 
