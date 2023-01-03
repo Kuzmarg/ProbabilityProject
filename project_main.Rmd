@@ -139,79 +139,85 @@ print(head(dob_df,10))
 ```
 
 ```{r}
+age_of_actors_function <- function(start_of_period, end_of_period, step){
+  number_of_period = ((end_of_period - start_of_period) / step) + 1
 
-Years = seq(1950,2015,length = 66)
-
-print(Years)
-
-Ages = c()
-MaleAges = c()
-FemaleAges = c()
-for (year in Years) {
-  year_ages = c()
-  cast_of_films = df[strtoi(substring(df$Date, 0, 4)) >= year & 
-                   strtoi(substring(df$Date, 0, 4)) < year+1, ]$Cast
+  Years = seq(start_of_period,end_of_period,length = number_of_period)
   
-  number_of_actors = 0
-  age_of_actors = 0
-  number_of_male_actors = 0
-  age_of_male_actors = 0
-  number_of_female_actors = 0
-  age_of_female_actors = 0
+  print(Years)
   
-  for (cast in cast_of_films){
-    start_index = unlist(gregexpr("id': ", cast))[1]
-    id_with_junk = substr(cast, start_index + 5, start_index + 12)
-    id = strtoi(substr(id_with_junk, 1, unlist(gregexpr(",", id_with_junk))[1] - 1))
-    gender_start_index = unlist(gregexpr("gender': ", cast))[1]
-    gender = strtoi(substr(cast, gender_start_index + 9, gender_start_index + 9))
-    row = which(grepl(id, dob_df$Id))[1]
-    if (!is.na(row)){
-      if (gender == 2){
-          number_of_male_actors = number_of_male_actors + 1
-          age_of_male_actors = age_of_male_actors + (year - strtoi(dob_df$Birth[row]))
+  Ages = c()
+  MaleAges = c()
+  FemaleAges = c()
+  for (year in Years) {
+    year_ages = c()
+    cast_of_films = df[strtoi(substring(df$Date, 0, 4)) >= year & 
+                     strtoi(substring(df$Date, 0, 4)) < year+step, ]$Cast
+    
+    number_of_actors = 0
+    age_of_actors = 0
+    number_of_male_actors = 0
+    age_of_male_actors = 0
+    number_of_female_actors = 0
+    age_of_female_actors = 0
+    
+    for (cast in cast_of_films){
+      start_index = unlist(gregexpr("id': ", cast))[1]
+      id_with_junk = substr(cast, start_index + 5, start_index + 12)
+      id = strtoi(substr(id_with_junk, 1, unlist(gregexpr(",", id_with_junk))[1] - 1))
+      gender_start_index = unlist(gregexpr("gender': ", cast))[1]
+      gender = strtoi(substr(cast, gender_start_index + 9, gender_start_index + 9))
+      row = which(grepl(id, dob_df$Id))[1]
+      if (!is.na(row)){
+        if (gender == 2){
+            number_of_male_actors = number_of_male_actors + 1
+            age_of_male_actors = age_of_male_actors + (year - strtoi(dob_df$Birth[row]))
+        }
+        else{
+            number_of_female_actors = number_of_female_actors + 1
+            age_of_female_actors = age_of_female_actors + (year - strtoi(dob_df$Birth[row]))
+        }
+        number_of_actors = number_of_actors + 1
+        age_of_actors = age_of_actors + (year - strtoi(dob_df$Birth[row]))
       }
-      else{
-          number_of_female_actors = number_of_female_actors + 1
-          age_of_female_actors = age_of_female_actors + (year - strtoi(dob_df$Birth[row]))
-      }
-      number_of_actors = number_of_actors + 1
-      age_of_actors = age_of_actors + (year - strtoi(dob_df$Birth[row]))
     }
     
-    start_index = unlist(gregexpr("id': ", cast))[1]
-    id_with_junk = substr(cast, start_index + 5, start_index + 12)
-    id = strtoi(substr(id_with_junk, 1, unlist(gregexpr(",", id_with_junk))[1] - 1))
-    row = which(grepl(id, dob_df$Id))[1]
-    if (!is.na(row)){
-      
-    }
+    Ages = append(Ages, age_of_actors / number_of_actors)
+    MaleAges = append(MaleAges, age_of_male_actors / number_of_male_actors)
+    FemaleAges = append(FemaleAges, age_of_female_actors / number_of_female_actors)
+    cat("=============================================================================================\n")
+    cat("For year ", year, " the average actor age is ", age_of_actors / number_of_actors, "\n")
+    cat("For year ", year, " the average male actor age is ", age_of_male_actors / number_of_male_actors, "\n")
+    cat("For year ", year, " the average female actor age is ", age_of_female_actors / number_of_female_actors, "\n")
   }
   
-  Ages = append(Ages, age_of_actors / number_of_actors)
-  MaleAges = append(MaleAges, age_of_male_actors / number_of_male_actors)
-  FemaleAges = append(FemaleAges, age_of_female_actors / number_of_female_actors)
-  cat("=============================================================================================\n")
-  cat("For year ", year, " the average actor age is ", age_of_actors / number_of_actors, "\n")
-  cat("For year ", year, " the average male actor age is ", age_of_male_actors / number_of_male_actors, "\n")
-  cat("For year ", year, " the average female actor age is ", age_of_female_actors / number_of_female_actors, "\n")
+  
+  plot(Years, MaleAges, col = "blue", main = "Mean Age of Leading Male and Female Actor over Years", ylim = c(25,45))
+  points(Years, FemaleAges, col = "purple")
+  
+  regressional_model_male = lm(MaleAges~Years)
+  regressional_model_female = lm(FemaleAges~Years)
+  abline(regressional_model_male, col = "blue")
+  abline(regressional_model_female, col = "purple")
+  summary(regressional_model_male)
+  summary(regressional_model_female)
+  
+  plot(Years, Ages, col="blue", main = "Mean Age of Leading Actor over Years")
+  
+  regressional_model = lm(Ages~Years)
+  abline(regressional_model, col = "red")
+  summary(regressional_model)
 }
-
-
-plot(Years, MaleAges, col = "blue", main = "Mean Age of Leading Male Actor over Years")
-points(Years, FemaleAges, col = "purple", main = "Mean Age of Leading Female Actor over Years")
-
-regressional_model_male = lm(MaleAges~Years)
-regressional_model_female = lm(FemaleAges~Years)
-abline(regressional_model_male, col = "blue")
-abline(regressional_model_female, col = "purple")
-summary(regressional_model_male)
-summary(regressional_model_female)
-
-plot(Years, Ages, col="blue", main = "Mean Age of Leading Actor over Years")
-
-regressional_model = lm(Ages~Years)
-abline(regressional_model, col = "red")
-summary(regressional_model)
 ```
 
+```{r}
+age_of_actors_function(1955, 2015, 5)
+```
+
+```{r}
+age_of_actors_function(1955, 1999, 1)
+```
+
+```{r}
+age_of_actors_function(2000, 2015, 1)
+```
