@@ -143,6 +143,7 @@ for (category in Categories){
 }
 
 ```
+
 ## Hypothesis 3: Age of Leading Actors
 
 Here, we test whether the film duration over time actual decreased. The first try was to build a linear regression model of mean film duration over time. **The reason for it is that the linear model can clearly show whether the relation is increasing or decreasing.** We took 5 years periods and built a relation of mean film duration in these periods to the year of film release (for a period of 5 years we took the middle of this period).
@@ -200,28 +201,28 @@ age_of_actors_function <- function(start_of_period, end_of_period, step){
     Ages = append(Ages, age_of_actors / number_of_actors)
     MaleAges = append(MaleAges, age_of_male_actors / number_of_male_actors)
     FemaleAges = append(FemaleAges, age_of_female_actors / number_of_female_actors)
-    cat("=============================================================================================\n")
-    cat("For year ", year, " the average actor age is ", age_of_actors / number_of_actors, "\n")
-    cat("For year ", year, " the average male actor age is ", age_of_male_actors / number_of_male_actors, "\n")
-    cat("For year ", year, " the average female actor age is ", age_of_female_actors / number_of_female_actors, "\n")
+    #cat("=============================================================================================\n")
+    #cat("For year ", year, " the average actor age is ", age_of_actors / number_of_actors, "\n")
+    #cat("For year ", year, " the average male actor age is ", age_of_male_actors / number_of_male_actors, "\n")
+    #cat("For year ", year, " the average female actor age is ", age_of_female_actors / number_of_female_actors, "\n")
   }
   
   
-  plot(Years, MaleAges, col = "blue", main = "Mean Age of Leading Male and Female Actor over Years", ylim = c(25,45))
+  plot(Years, MaleAges, col = "blue", main = paste("Mean Age of Leading Male and Female Actor between ", toString(start_of_period), " and ", toString(end_of_period)), ylim = c(25,45))
   points(Years, FemaleAges, col = "purple")
   
   regressional_model_male = lm(MaleAges~Years)
   regressional_model_female = lm(FemaleAges~Years)
   abline(regressional_model_male, col = "blue")
   abline(regressional_model_female, col = "purple")
-  summary(regressional_model_male)
-  summary(regressional_model_female)
+  print(summary(regressional_model_male))
+  print(summary(regressional_model_female))
   
-  plot(Years, Ages, col="blue", main = "Mean Age of Leading Actor over Years")
+  plot(Years, Ages, col="blue", main = paste("Mean Age of Leading Actor between ", toString(start_of_period), " and ", toString(end_of_period)))
   
   regressional_model = lm(Ages~Years)
   abline(regressional_model, col = "red")
-  summary(regressional_model)
+  print(summary(regressional_model))
 }
 ```
 
