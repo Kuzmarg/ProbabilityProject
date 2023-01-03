@@ -109,4 +109,19 @@ As we see, the only category in which the duration decreased as we expected is *
 **Overall**, in this part we took a chance to use linear regression and t-test to find out that the duration of films actually did not decrease from the previous century's last decades.\
 **Now, let's move to the second hypothesis**
 
-## Hypothesis 2: [...]
+## Part 2: here we want to analyze different film categories and see how their popularities are distributed
+Firstly, that`s the quantities of all films from dataframe corresponding to the genre:
+```{r}
+Categories = c("Crime", "Comedy", "Action", "Thriller", "Adventure", "Science Fiction", "Drama", "Romance")
+categories_vec <- c()
+for (category in Categories){
+  for (row in df$Categories){
+    if (grepl(category, row)){
+      categories_vec = append(categories_vec, category)
+    }
+  }
+}
+categories_counts <- as.data.frame(table(categories_vec))
+categories_counts
+barplot(categories_counts$Freq, main = "Number of films", names = categories_counts$categories_vec)
+```
