@@ -1,13 +1,16 @@
 ---
 title: "ResearchProject"
-output: html_notebook
+output:
+  html_document:
+    df_print: paged
+  pdf_document: default
 ---
 
 Team members: Vladyslav Humennyy, Volodymyr Kuzma, Svitlana Hovorova.
 
 # The Films Research
 
-We chose a dataset from TMDb, containing various information on films from 1880 to 2022 to explore more about the changes that happened to film industry through the years and analyse these **3 main  factors:**
+We chose a dataset from TMDb, containing various information on films from 1880 to 2022 to explore more about the changes that happened to film industry through the years and analyse these **3 main factors:**
 
 **1)** The average film duration: we suggest that as time goes films become shorter. H0: on average, the duration of films decreases by 0%; H1: the difference is present. We are also interested in testing this metric in different film categories;
 
@@ -110,7 +113,9 @@ As we see, the only category in which the duration decreased as we expected is *
 **Now, let's move to the second hypothesis**
 
 ## Part 2: here we want to analyze different film categories and see how their popularities are distributed
+
 Firstly, that's the quantities of all films from dataframe corresponding to the genre:
+
 ```{r}
 Categories = c("Crime", "Comedy", "Action", "Thriller", "Adventure", "Science Fiction", "Drama", "Romance")
 categories_vec <- c()
@@ -125,8 +130,9 @@ categories_counts <- as.data.frame(table(categories_vec))
 categories_counts
 barplot(categories_counts$Freq, main = "Number of films", names = categories_counts$categories_vec)
 ```
-Let's now see how popularitн of different genres changed over years
-(xlab depicts the year when there was the biggest number of films of such category produced)
+
+Let's now see how popularit of different genres changed over years (xlab depicts the year when there was the biggest number of films of such category produced)
+
 ```{r}
 
 years <- strtrim(df$Date, 4)
@@ -144,6 +150,7 @@ for (category in Categories){
 }
 
 ```
+
 As plots show, there just was growth in number of films present, and it also is not linear. So, roughly speaking, there is no particular trend in in genres preferences of producers changes: the years with the biggest number of films is 2009 +- 1 year for all the categories.
 
 ## Hypothesis 3: Age of Leading Actors
@@ -247,10 +254,22 @@ The first test would be for 20th century.
 age_of_actors_function(1955, 1999, 1)
 ```
 
-
+At that period we can see, that we have slight decrease in the mean age of male actors towards the end of century, though the average age of female actresses a little increased. But both changes are insignificant. We bound that with the high flow of actors in the industry due to the rapid growth of it in that period. And because of it we have the mean value very similar at the whole period.
 
 ```{r}
 age_of_actors_function(2000, 2015, 1)
 ```
 
 For the 21st century we see the most 'linear' graphs. P-values of all our graphs are very-very small. In fact, they are almost perfect and from the result of our linear model we can say, that there is indeed the relation between age and year. In recent years mean age spiked in comparison to previous decades. There may be several reasons for that: demand on older actors, lack of actor flow (stars occupy their places for years) general aging of people in that industry.
+
+## Conclusions
+
+In that research we studied the data about film industry at very long period (almost from the start of its development). We started our research with view at the movies and statistics, which was a bit different to the reality. **All** our initial hypothesis were opposite to the real data, which is a very cool result in fact. 
+
+With help of statistics we found the truth about average film length, which did not decrease with flow of time. Our hypothesis, that people have less time for movies was crashed after those results.
+
+After research of distributions of different genres we concluded that there was not a clear relation between some time period and popularity of certain category of films. 
+
+In the end, we found out, that mean age of leading actor is increasing over time. To our surprise, youngsters are not that common lead actors, as there is a growing demand on older actors. We can say, that people love some actors and stick to them for a long time.
+
+The whole project was fun and cool test for our statistics knowledge and skills. So, from the behalf of our team, thank you for the reading of our document.
