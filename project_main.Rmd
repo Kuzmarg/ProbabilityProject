@@ -126,6 +126,7 @@ categories_counts
 barplot(categories_counts$Freq, main = "Number of films", names = categories_counts$categories_vec)
 ```
 Let`s now see how popularitн of different genres changed over years
+(xlab deopicts the year when there was the biggest number of films of such category produced)
 ```{r}
 
 years <- strtrim(df$Date, 4)
@@ -143,6 +144,7 @@ for (category in Categories){
 }
 
 ```
+As plots show, there just was growth in number of films present, and it also is not linear. So, roughly speaking, there is no particular trend in in genres preferences of producers changes: the years with the biggest number of films is 2009 +- 1 year for all the categories.
 
 ## Hypothesis 3: Age of Leading Actors
 
